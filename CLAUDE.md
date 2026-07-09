@@ -5,23 +5,42 @@ Este é um **projeto separado e isolado** do site WordPress atual (`Local Sites\
 - **NÃO** editar, referenciar como dependência, ou reutilizar código do WordPress.
 - **NÃO** mexer em nada dentro de `Local Sites\`, `temp_v2\`, `temp_restore*\` ou nos `.zip` do tema.
 - O site WordPress está sendo mantido por **outro agente/sessão em paralelo**. Qualquer alteração cruzada pode causar conflito.
-- Este projeto pode olhar o site WP atual (`portaloneinfo.com.br`) e os prints em `docs/reference-screenshots/` **apenas como referência visual/de conteúdo**, nunca como base técnica.
+- O site WP atual (`portaloneinfo.com.br`) e os prints analisados em `docs/DESIGN-REFERENCE.md` servem **apenas como referência visual/de conteúdo**, nunca como base técnica.
+
+## ⚠️ Onde o código vive
+O **código-fonte deste projeto roda localmente em `C:\Users\EMPRESA\source\repos\portaldainformatica`**, fora do Google Drive.
+- Motivo: a pasta original (`G:\Meu Drive\BACKUP2\portaldainformatica`) é sincronizada pelo Google Drive, o que deixou `npm install`/scaffold extremamente lentos (I/O de sincronização).
+- A cópia em `G:\Meu Drive\BACKUP2\portaldainformatica` continua existindo com a documentação (`docs/`, `skills/`), mas **não é mais atualizada com código** — o repositório Git (GitHub) é a fonte da verdade.
+- Repositório remoto: https://github.com/junior14oliveira-art/portaldainformatica
 
 ## O que é este projeto
-Reconstrução completa do site institucional/e-commerce da **Portal One Informática**, do zero, **sem WordPress**. Stack técnica ainda **não definida** — será decidida quando o usuário mandar o prompt de arquitetura/planta.
+E-commerce enterprise para a **Portal One Informática**, construído do zero, **sem WordPress**, seguindo o "Claude Code Master Guide" em `docs/00-VISAO-GERAL.md` a `docs/13-roadmap.md`.
 
-## Status atual
-- [x] Pasta do projeto criada
-- [x] Documentação inicial (este arquivo, `docs/PRODUCT.md`, `docs/DESIGN-REFERENCE.md`)
-- [ ] Definição de stack (aguardando prompt do usuário)
-- [ ] Setup do projeto
-- [ ] Implementação
+## Stack definida (ver `docs/02-ARQUITETURA.md`)
+Next.js (App Router) + React + TypeScript + Prisma ORM + PostgreSQL + Redis + Better Auth + Mercado Pago + Melhor Envio + Cloudflare R2 + Resend + Sentry + Vercel. Docker Compose para ambiente local (Postgres, Redis, Mailpit, Adminer).
 
-## Skills instaladas relevantes para este projeto
-- **impeccable** (`pbakaus/impeccable`) — usar para auditar/polir o design, evitar cara "genérica de IA". Rodar `/impeccable init` assim que o projeto novo tiver código, criando `PRODUCT.md`/`DESIGN.md` próprios do impeccable (não confundir com `docs/PRODUCT.md` deste handoff).
-- **claude-mem** — memória entre sessões; usar para não perder contexto entre handoffs deste projeto.
+**Nota Prisma 7:** o schema não aceita mais `url` no bloco `datasource` — a conexão fica em `app/prisma.config.ts` (usa `@prisma/adapter-pg`). Ver esse arquivo antes de mexer em configuração de banco.
+
+**Nota Next.js 16:** versão mais recente que o treinamento base do Claude — antes de usar APIs novas do App Router, consultar `app/node_modules/next/dist/docs/` (bundlado localmente).
+
+## Status atual — Fase 1 (Infraestrutura)
+- [x] Documentação completa lida e escopo confirmado com o usuário
+- [x] Projeto Next.js + TypeScript criado (`app/`)
+- [x] Estrutura de pastas enterprise criada (`components/`, `features/`, `services/`, `repositories/`, etc — ver `docs/02-ARQUITETURA.md`)
+- [x] `docker-compose.yml` criado (Postgres, Redis, Mailpit, Adminer) — **ainda não testado**, aguardando Docker Desktop
+- [x] Prisma inicializado com schema base (`app/prisma/schema.prisma`) cobrindo usuários, catálogo, estoque, carrinho, pedidos, pagamentos, avaliações, cupons, cashback, banners, blog e auditoria
+- [x] `npx prisma generate` validado sem banco
+- [x] App validado rodando em `localhost` (`npm run dev`)
+- [ ] **Pendente:** usuário está instalando o Docker Desktop (precisa reiniciar o PC) — assim que pronto, rodar `docker compose up -d` + `npx prisma migrate dev` + seed
+- [ ] Fase 2 em diante: ver `docs/13-roadmap.md`
+
+## Skills/plugins disponíveis
+- **impeccable** (`pbakaus/impeccable`) — auditar/polir o design. Rodar `/impeccable init` quando as primeiras telas existirem.
+- **claude-mem** — memória entre sessões.
 
 ## Próximos passos
-1. Usuário vai enviar um **prompt-planta** (blueprint) descrevendo o que construir.
-2. Analisar o prompt à luz do `docs/PRODUCT.md` e `docs/DESIGN-REFERENCE.md`.
-3. Só então começar a construir — com stack a ser escolhida na hora, orientada pelo prompt.
+1. Usuário termina de instalar o Docker Desktop e reinicia o PC.
+2. Rodar `docker compose up -d` na raiz do repositório local.
+3. Rodar `npx prisma migrate dev --name init` dentro de `app/`.
+4. Criar seed inicial (`prisma/seed.ts`) com dados de exemplo.
+5. Seguir para Fase 2 do roadmap (banco de dados/autenticação) — ver `docs/13-roadmap.md`.
