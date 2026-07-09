@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Laptop } from "lucide-react";
 import styles from "./ProductCard.module.css";
 
 type ProductCardProps = {
@@ -17,8 +18,8 @@ const currency = new Intl.NumberFormat("pt-BR", {
 export function ProductCard({ slug, name, brand, price, pricePix }: ProductCardProps) {
   return (
     <Link href={`/produto/${slug}`} className={styles.card}>
-      <div className={styles.image} aria-hidden>
-        🖥️
+      <div className={styles.image}>
+        <Laptop size={40} strokeWidth={1.5} aria-hidden />
       </div>
       {brand ? <span className={styles.brand}>{brand}</span> : null}
       <h3 className={styles.name}>{name}</h3>

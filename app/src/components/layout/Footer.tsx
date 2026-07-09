@@ -1,5 +1,13 @@
 import Link from "next/link";
+import { Lock, Mail, MapPin, Phone, RotateCcw, ShieldCheck, BadgeCheck } from "lucide-react";
 import styles from "./Footer.module.css";
+
+const BADGES = [
+  { icon: Lock, label: "Site Seguro" },
+  { icon: ShieldCheck, label: "Compra Segura" },
+  { icon: BadgeCheck, label: "Produtos com Garantia" },
+  { icon: RotateCcw, label: "Devolução em 7 dias" },
+];
 
 export function Footer() {
   return (
@@ -39,18 +47,29 @@ export function Footer() {
         <div>
           <h3>Contato</h3>
           <ul>
-            <li>+55 (11) 94147-0245</li>
-            <li>contato@portaloneinformatica.com</li>
-            <li>São Paulo, SP - Brasil</li>
+            <li className={styles.contactItem}>
+              <Phone size={16} strokeWidth={2} aria-hidden />
+              +55 (11) 94147-0245
+            </li>
+            <li className={styles.contactItem}>
+              <Mail size={16} strokeWidth={2} aria-hidden />
+              contato@portaloneinformatica.com
+            </li>
+            <li className={styles.contactItem}>
+              <MapPin size={16} strokeWidth={2} aria-hidden />
+              São Paulo, SP - Brasil
+            </li>
           </ul>
         </div>
       </div>
 
       <div className={`container ${styles.badges}`}>
-        <span>🔒 Site Seguro</span>
-        <span>🛡️ Compra Segura</span>
-        <span>✅ Produtos com Garantia</span>
-        <span>↩️ Devolução em 7 dias</span>
+        {BADGES.map(({ icon: Icon, label }) => (
+          <span key={label} className={styles.badge}>
+            <Icon size={16} strokeWidth={2} aria-hidden />
+            {label}
+          </span>
+        ))}
       </div>
     </footer>
   );

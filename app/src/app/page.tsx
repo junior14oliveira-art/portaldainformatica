@@ -1,22 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, HeadphonesIcon, ShieldCheck, Truck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { getCategoryIcon } from "@/lib/category-icons";
 import { ProductCard } from "@/components/product/ProductCard";
 import styles from "./page.module.css";
 
 const TRUST_ITEMS = [
   {
-    icon: "📦",
-    title: "Suporte Especializado",
+    icon: HeadphonesIcon,
+    title: "Suporte especializado",
     text: "Sem complicações e sem custos adicionais",
   },
   {
-    icon: "🚚",
-    title: "Entrega Nacional",
+    icon: Truck,
+    title: "Entrega nacional",
     text: "Frete seguro para todo o Brasil",
   },
   {
-    icon: "🛡️",
-    title: "Site 100% Seguro",
+    icon: ShieldCheck,
+    title: "Site 100% seguro",
     text: "Compre ou alugue com total segurança",
   },
 ];
@@ -40,18 +43,30 @@ export default async function Home() {
     <div className={styles.page}>
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
-          <div>
-            <p className={styles.heroEyebrow}>Computadores Corporativos</p>
+          <div className={styles.heroCopy}>
             <h1 className={styles.heroTitle}>
-              Equipamentos revisados, prontos para o seu escritório
+              Equipamentos corporativos revisados, prontos para o seu
+              escritório
             </h1>
             <p className={styles.heroSubtitle}>
-              Desktops e notebooks Dell, HP e Lenovo com garantia e nota
-              fiscal.
+              Desktops e notebooks Dell, HP e Lenovo seminovos, com garantia e
+              nota fiscal — para empresas que precisam de custo-benefício sem
+              abrir mão de confiabilidade.
             </p>
             <Link href="/categoria/notebooks" className={styles.heroCta}>
-              Ver Notebooks
+              Ver notebooks
+              <ArrowRight size={18} strokeWidth={2.25} aria-hidden />
             </Link>
+          </div>
+          <div className={styles.heroMedia}>
+            <Image
+              src="https://images.unsplash.com/photo-1535957998253-26ae1ef29506?auto=format&fit=crop&w=1200&q=80"
+              alt="Notebook corporativo aberto sobre uma mesa de escritório moderno"
+              fill
+              sizes="(max-width: 900px) 100vw, 480px"
+              priority
+              className={styles.heroImage}
+            />
           </div>
         </div>
       </section>
@@ -59,7 +74,7 @@ export default async function Home() {
       <section className={`container ${styles.trust}`}>
         {TRUST_ITEMS.map((item) => (
           <div key={item.title} className={styles.trustItem}>
-            <span className={styles.trustIcon}>{item.icon}</span>
+            <item.icon size={22} strokeWidth={2} className={styles.trustIcon} aria-hidden />
             <div>
               <h3>{item.title}</h3>
               <p>{item.text}</p>
@@ -71,21 +86,27 @@ export default async function Home() {
       <section className={`container ${styles.section}`}>
         <div className={styles.sectionHeader}>
           <h2>O que você procura hoje?</h2>
-          <Link href="/categorias">Ver todas as categorias →</Link>
+          <Link href="/categorias" className={styles.sectionLink}>
+            Ver todas as categorias
+            <ArrowRight size={16} strokeWidth={2.25} aria-hidden />
+          </Link>
         </div>
         <div className={styles.categoryGrid}>
-          {categories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/categoria/${category.slug}`}
-              className={styles.categoryItem}
-            >
-              <span className={styles.categoryCircle} aria-hidden>
-                💻
-              </span>
-              <span>{category.name}</span>
-            </Link>
-          ))}
+          {categories.map((category) => {
+            const Icon = getCategoryIcon(category.slug);
+            return (
+              <Link
+                key={category.id}
+                href={`/categoria/${category.slug}`}
+                className={styles.categoryItem}
+              >
+                <span className={styles.categoryCircle}>
+                  <Icon size={28} strokeWidth={1.75} aria-hidden />
+                </span>
+                <span>{category.name}</span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
