@@ -23,24 +23,32 @@ Next.js (App Router) + React + TypeScript + Prisma ORM + PostgreSQL + Redis + Be
 
 **Nota Next.js 16:** versão mais recente que o treinamento base do Claude — antes de usar APIs novas do App Router, consultar `app/node_modules/next/dist/docs/` (bundlado localmente).
 
-## Status atual — Fase 1 (Infraestrutura)
+## Banco de dados local (SEM Docker por enquanto)
+Por decisão do usuário, o Docker foi adiado (ele vai instalar depois). Para não travar o desenvolvimento, o **PostgreSQL 17 foi instalado nativamente no Windows** via `winget` (serviço `postgresql-x64-17`, rodando como serviço do Windows, sem precisar do Docker).
+
+- Usuário/senha de dev: `portaldainformatica` / `portaldainformatica` (bate com `.env.example`)
+- Banco: `portaldainformatica`, owner `portaldainformatica`, com permissão `CREATEDB` (necessária para o shadow database do `prisma migrate dev`)
+- Autenticação do Postgres está em `scram-sha-256` (segura) — **nunca deixar em `trust`**. Se precisar de acesso admin de novo, usar o método temporário trust→revert (exige reiniciar o serviço 2x como Administrador, pois a sessão do agente não tem privilégio de admin no Windows) e sempre confirmar com o usuário antes.
+- ⚠️ Ao editar `pg_hba.conf` no Windows, **nunca usar `Set-Content -Encoding utf8`** do PowerShell — ele escreve BOM UTF-8, que quebra o parser do Postgres e impede o serviço de iniciar. Usar `sed`/escrita sem BOM.
+- Quando o Docker for instalado futuramente, migrar para `docker-compose.yml` (já existe na raiz do repo) e desativar o serviço nativo, ou manter os dois em portas diferentes — decidir com o usuário na hora.
+
+## Status atual — Fase 1 (Infraestrutura) — CONCLUÍDA
 - [x] Documentação completa lida e escopo confirmado com o usuário
 - [x] Projeto Next.js + TypeScript criado (`app/`)
 - [x] Estrutura de pastas enterprise criada (`components/`, `features/`, `services/`, `repositories/`, etc — ver `docs/02-ARQUITETURA.md`)
-- [x] `docker-compose.yml` criado (Postgres, Redis, Mailpit, Adminer) — **ainda não testado**, aguardando Docker Desktop
-- [x] Prisma inicializado com schema base (`app/prisma/schema.prisma`) cobrindo usuários, catálogo, estoque, carrinho, pedidos, pagamentos, avaliações, cupons, cashback, banners, blog e auditoria
-- [x] `npx prisma generate` validado sem banco
-- [x] App validado rodando em `localhost` (`npm run dev`)
-- [ ] **Pendente:** usuário está instalando o Docker Desktop (precisa reiniciar o PC) — assim que pronto, rodar `docker compose up -d` + `npx prisma migrate dev` + seed
-- [ ] Fase 2 em diante: ver `docs/13-roadmap.md`
+- [x] `docker-compose.yml` criado (Postgres, Redis, Mailpit, Adminer) — pronto para quando o Docker for instalado
+- [x] PostgreSQL 17 nativo instalado e configurado (ver seção acima)
+- [x] Prisma 7 configurado com `@prisma/adapter-pg` (schema + `prisma.config.ts` + `src/lib/prisma.ts`)
+- [x] Migration inicial aplicada (`prisma/migrations/20260709181130_init`)
+- [x] Seed rodado com sucesso (admin + 7 categorias + 3 marcas)
+- [x] App validado rodando em `localhost:3000`
+- [ ] Redis: ainda não configurado (depende do Docker ou de instalação nativa futura) — nenhum código depende dele ainda
 
 ## Skills/plugins disponíveis
 - **impeccable** (`pbakaus/impeccable`) — auditar/polir o design. Rodar `/impeccable init` quando as primeiras telas existirem.
 - **claude-mem** — memória entre sessões.
 
-## Próximos passos
-1. Usuário termina de instalar o Docker Desktop e reinicia o PC.
-2. Rodar `docker compose up -d` na raiz do repositório local.
-3. Rodar `npx prisma migrate dev --name init` dentro de `app/`.
-4. Criar seed inicial (`prisma/seed.ts`) com dados de exemplo.
-5. Seguir para Fase 2 do roadmap (banco de dados/autenticação) — ver `docs/13-roadmap.md`.
+## Próximos passos (Fase 2 do roadmap — ver `docs/13-roadmap.md`)
+1. Autenticação: Better Auth (login/cadastro/Google OAuth) — `docs/05-BACKEND.md` e `docs/12-seguraca.md`.
+2. Camadas de repository/service para produtos e categorias.
+3. Primeiras telas reais (Home, Categoria, Produto) usando `docs/06-FRONTEND.md` e `docs/10-desing system.md` como referência de design system — **não copiar o layout do WordPress atual**, só usar como referência de conteúdo.
