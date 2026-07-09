@@ -155,26 +155,6 @@
   padding-block: var(--space-2);
 }
 
-.categoriesButton {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  background: var(--color-dark);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: var(--space-2) var(--space-4);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background var(--duration-fast) var(--ease-out-quart);
-}
-
-.categoriesButton:hover {
-  background: var(--color-dark-hover);
-}
-
 .navList {
   display: flex;
   gap: var(--space-6);

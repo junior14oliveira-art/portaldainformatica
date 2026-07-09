@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { headers } from "next/headers";
-import { Menu, Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
+import { Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
 import { peekCartSessionId } from "@/lib/cart-session";
 import { getCartItemCount } from "@/services/cart-service";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { CategoriesMenu } from "@/components/layout/CategoriesMenu";
 import styles from "./Header.module.css";
 
 const NAV_LINKS = [
@@ -30,6 +32,11 @@ export async function Header() {
   const sessionId = await peekCartSessionId();
   const cartCount = sessionId ? await getCartItemCount(sessionId) : 0;
   const session = await auth.api.getSession({ headers: await headers() });
+  const categories = await prisma.category.findMany({
+    where: { active: true },
+    orderBy: { order: "asc" },
+    select: { id: true, name: true, slug: true },
+  });
 
   return (
     <header className={styles.header}>
@@ -103,10 +110,7 @@ export async function Header() {
 
       <nav className={styles.nav}>
         <div className={`container ${styles.navInner}`}>
-          <button className={styles.categoriesButton} type="button">
-            <Menu size={16} strokeWidth={2.25} aria-hidden />
-            Categorias
-          </button>
+          <CategoriesMenu categories={categories} />
           <ul className={styles.navList}>
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
