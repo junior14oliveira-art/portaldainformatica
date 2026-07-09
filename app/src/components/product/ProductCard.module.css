@@ -16,6 +16,14 @@
   transform: translateY(-3px);
 }
 
+.mediaLink {
+  display: block;
+}
+
+.nameLink {
+  display: block;
+}
+
 .media {
   position: relative;
   aspect-ratio: 4 / 3;
@@ -123,19 +131,30 @@
 
 .buyButton {
   margin-top: auto;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
   text-align: center;
   background: var(--color-primary);
   color: #fff;
+  border: none;
   border-radius: var(--radius-md);
   padding-block: var(--space-3);
   font-weight: 600;
   font-size: var(--text-sm);
+  cursor: pointer;
   transition: background var(--duration-fast) var(--ease-out-quart);
 }
 
-.card:hover .buyButton {
+.buyButton:hover:not(:disabled) {
   background: var(--color-primary-hover);
+}
+
+.buyButton:disabled {
+  cursor: default;
+  opacity: 0.85;
 }
 
 @media (prefers-color-scheme: dark) {

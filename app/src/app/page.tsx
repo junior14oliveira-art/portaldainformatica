@@ -167,6 +167,7 @@ export default async function Home() {
             {products.map((product) => (
               <ProductCard
                 key={product.id}
+                id={product.id}
                 slug={product.slug}
                 name={product.name}
                 brand={product.brand?.name}

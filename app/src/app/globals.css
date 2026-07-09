@@ -120,6 +120,16 @@ button {
   padding-inline: var(--space-6);
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

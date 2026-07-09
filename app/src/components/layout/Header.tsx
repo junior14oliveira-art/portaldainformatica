@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
+import { peekCartSessionId } from "@/lib/cart-session";
+import { getCartItemCount } from "@/services/cart-service";
 import styles from "./Header.module.css";
 
 const NAV_LINKS = [
@@ -22,7 +24,10 @@ const TOPBAR_ITEMS = [
   { icon: Truck, label: "Entrega para todo o Brasil" },
 ];
 
-export function Header() {
+export async function Header() {
+  const sessionId = await peekCartSessionId();
+  const cartCount = sessionId ? await getCartItemCount(sessionId) : 0;
+
   return (
     <header className={styles.header}>
       <div className={styles.topbar}>
@@ -69,10 +74,17 @@ export function Header() {
               </span>
             </Link>
             <Link href="/carrinho" className={styles.actionItem}>
-              <ShoppingCart size={20} strokeWidth={2} aria-hidden />
+              <span className={styles.cartIconWrapper}>
+                <ShoppingCart size={20} strokeWidth={2} aria-hidden />
+                {cartCount > 0 ? (
+                  <span className={styles.cartBadge}>{cartCount}</span>
+                ) : null}
+              </span>
               <span className={styles.actionText}>
                 <span className={styles.actionLabel}>Carrinho</span>
-                <span className={styles.actionSub}>0 itens</span>
+                <span className={styles.actionSub}>
+                  {cartCount} {cartCount === 1 ? "item" : "itens"}
+                </span>
               </span>
             </Link>
           </div>

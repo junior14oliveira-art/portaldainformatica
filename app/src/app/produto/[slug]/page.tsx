@@ -9,12 +9,12 @@ import {
   Laptop,
   MessageCircle,
   ShieldCheck,
-  ShoppingCart,
   Truck,
   Zap,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/product/ProductCard";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { COMPANY } from "@/constants/company";
 import styles from "./page.module.css";
 
@@ -138,10 +138,11 @@ export default async function ProductPage({ params }: PageProps) {
           </div>
 
           <div className={styles.actions}>
-            <button type="button" className={styles.buyButton}>
-              <ShoppingCart size={18} strokeWidth={2.25} aria-hidden />
-              Adicionar ao carrinho
-            </button>
+            <AddToCartButton
+              productId={product.id}
+              className={styles.buyButton}
+              label="Adicionar ao carrinho"
+            />
             <a
               href={whatsappProduct}
               target="_blank"
@@ -188,6 +189,7 @@ export default async function ProductPage({ params }: PageProps) {
             {related.map((item) => (
               <ProductCard
                 key={item.id}
+                id={item.id}
                 slug={item.slug}
                 name={item.name}
                 brand={item.brand?.name}
