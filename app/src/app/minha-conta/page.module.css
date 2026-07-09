@@ -1,0 +1,29 @@
+.page {
+  padding-block: var(--space-10) var(--space-16);
+  max-width: 640px;
+}
+
+.page h1 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-6);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+
+.greeting {
+  font-size: var(--text-lg);
+}
+
+.email {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-6);
+}

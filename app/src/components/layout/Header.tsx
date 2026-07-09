@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { Menu, Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
 import { peekCartSessionId } from "@/lib/cart-session";
 import { getCartItemCount } from "@/services/cart-service";
+import { auth } from "@/lib/auth";
 import styles from "./Header.module.css";
 
 const NAV_LINKS = [
@@ -27,6 +29,7 @@ const TOPBAR_ITEMS = [
 export async function Header() {
   const sessionId = await peekCartSessionId();
   const cartCount = sessionId ? await getCartItemCount(sessionId) : 0;
+  const session = await auth.api.getSession({ headers: await headers() });
 
   return (
     <header className={styles.header}>
@@ -66,11 +69,18 @@ export async function Header() {
           </form>
 
           <div className={styles.actions}>
-            <Link href="/minha-conta" className={styles.actionItem}>
+            <Link
+              href={session ? "/minha-conta" : "/entrar"}
+              className={styles.actionItem}
+            >
               <User size={20} strokeWidth={2} aria-hidden />
               <span className={styles.actionText}>
-                <span className={styles.actionLabel}>Minha conta</span>
-                <span className={styles.actionSub}>Entrar / Cadastro</span>
+                <span className={styles.actionLabel}>
+                  {session ? session.user.name || "Minha conta" : "Minha conta"}
+                </span>
+                <span className={styles.actionSub}>
+                  {session ? "Ver perfil" : "Entrar / Cadastro"}
+                </span>
               </span>
             </Link>
             <Link href="/carrinho" className={styles.actionItem}>
