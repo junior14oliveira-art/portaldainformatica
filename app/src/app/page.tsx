@@ -7,6 +7,7 @@ import {
   FileText,
   Headset,
   MessageCircle,
+  RefreshCw,
   ShieldCheck,
   Truck,
   Wrench,
@@ -14,10 +15,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { getCategoryIcon } from "@/lib/category-icons";
 import { ProductCard } from "@/components/product/ProductCard";
+import { WHATSAPP_URL, WHATSAPP_RENTAL_URL } from "@/constants/company";
 import styles from "./page.module.css";
-
-const WHATSAPP_URL =
-  "https://wa.me/5511941470245?text=Ol%C3%A1!%20Quero%20falar%20com%20um%20especialista.";
 
 const HERO_CHIPS = [
   { icon: BadgeCheck, label: "Garantia de 6 meses" },
@@ -29,7 +28,7 @@ const TRUST_ITEMS = [
   {
     icon: Headset,
     title: "Suporte especializado",
-    text: "Atendimento direto com quem entende de hardware corporativo.",
+    text: "Suporte remoto, telefônico e on-site com equipe qualificada.",
   },
   {
     icon: Truck,
@@ -44,9 +43,10 @@ const TRUST_ITEMS = [
 ];
 
 const RENTAL_BENEFITS = [
-  { icon: CalendarClock, label: "Contratos flexíveis, sem fidelidade longa" },
-  { icon: Wrench, label: "Manutenção e reposição inclusas" },
-  { icon: FileText, label: "Locação dedutível como despesa operacional" },
+  { icon: CalendarClock, label: "Períodos flexíveis: diária, semanal, mensal ou 12/24/36 meses" },
+  { icon: Wrench, label: "Manutenção on-site inclusa, com troca de equipamento" },
+  { icon: FileText, label: "Valor mensal dedutível do IR como despesa operacional" },
+  { icon: RefreshCw, label: "Atualização dos equipamentos durante o contrato" },
 ];
 
 const BRAND_NAMES = ["Dell", "HP", "Lenovo", "Cisco", "Samsung", "LG"];
@@ -72,6 +72,15 @@ export default async function Home() {
   return (
     <div className={styles.page}>
       <section className={styles.hero}>
+        <Image
+          src="/institucional/banners/hardware.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={styles.heroBackground}
+          aria-hidden
+        />
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroCopy}>
             <h1 className={styles.heroTitle}>
@@ -105,16 +114,6 @@ export default async function Home() {
                 </li>
               ))}
             </ul>
-          </div>
-          <div className={styles.heroMedia}>
-            <Image
-              src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=80"
-              alt="Notebook corporativo sobre mesa de trabalho organizada"
-              fill
-              sizes="(max-width: 900px) 100vw, 520px"
-              priority
-              className={styles.heroImage}
-            />
           </div>
         </div>
       </section>
@@ -186,11 +185,12 @@ export default async function Home() {
       <section className={`container ${styles.rental}`}>
         <div className={styles.rentalInner}>
           <div className={styles.rentalCopy}>
-            <h2>Locação corporativa de equipamentos</h2>
+            <h2>Locação de máquinas e equipamentos</h2>
             <p>
-              Equipe sua operação sem imobilizar capital. Parque de máquinas
-              atualizado, manutenção por nossa conta e contrato sob medida
-              para o tamanho da sua empresa.
+              Preserve o capital de giro da sua empresa: computadores,
+              notebooks, All in One e servidores por assinatura, com
+              instalação de sistema e replicação da sua imagem corporativa
+              sem custo adicional.
             </p>
             <ul className={styles.rentalBenefits}>
               {RENTAL_BENEFITS.map(({ icon: Icon, label }) => (
@@ -201,7 +201,7 @@ export default async function Home() {
               ))}
             </ul>
             <a
-              href={WHATSAPP_URL}
+              href={WHATSAPP_RENTAL_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.rentalCta}
@@ -212,8 +212,8 @@ export default async function Home() {
           </div>
           <div className={styles.rentalMedia}>
             <Image
-              src="https://images.unsplash.com/photo-1587831990711-23ca6441447b?auto=format&fit=crop&w=1200&q=80"
-              alt="Corredor de servidores em datacenter iluminado"
+              src="/institucional/banners/historia.jpg"
+              alt="Equipe corporativa trabalhando com computadores"
               fill
               sizes="(max-width: 900px) 100vw, 480px"
               className={styles.rentalImage}

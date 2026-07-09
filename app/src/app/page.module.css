@@ -6,16 +6,37 @@
 /* ---------------------------------- Hero --------------------------------- */
 
 .hero {
+  position: relative;
   background: var(--color-dark);
   color: #fff;
+  overflow: hidden;
+}
+
+.heroBackground {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.5;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 20, 19, 0.92) 0%,
+    rgba(0, 40, 38, 0.55) 60%,
+    rgba(0, 40, 38, 0.25) 100%
+  );
 }
 
 .heroInner {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: var(--space-16);
-  padding-block: clamp(var(--space-12), 7vw, 88px);
+  padding-block: clamp(var(--space-12), 7vw, 96px);
 }
 
 .heroCopy {
@@ -97,18 +118,6 @@
 
 .heroChips svg {
   color: var(--color-primary);
-}
-
-.heroMedia {
-  position: relative;
-  aspect-ratio: 5 / 4;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
-}
-
-.heroImage {
-  object-fit: cover;
 }
 
 /* ------------------------------ Brand strip ------------------------------ */
@@ -380,15 +389,6 @@
 /* ------------------------------- Responsivo ------------------------------ */
 
 @media (max-width: 900px) {
-  .heroInner {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-  }
-
-  .heroMedia {
-    aspect-ratio: 16 / 9;
-  }
-
   .rentalInner {
     grid-template-columns: 1fr;
   }

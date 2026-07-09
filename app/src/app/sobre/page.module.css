@@ -1,0 +1,140 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner {
+  position: relative;
+  background: var(--color-dark);
+  color: #fff;
+  overflow: hidden;
+}
+
+.bannerImage {
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 20, 19, 0.9) 0%,
+    rgba(0, 40, 38, 0.4) 100%
+  );
+}
+
+.bannerInner {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(var(--space-12), 6vw, var(--space-16));
+}
+
+.bannerInner h1 {
+  font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-3);
+}
+
+.bannerInner p {
+  font-size: var(--text-lg);
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 56ch;
+}
+
+.section {
+  padding-block: var(--space-12);
+}
+
+.section h2 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-6);
+}
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+  gap: var(--space-16);
+  align-items: center;
+}
+
+.about p {
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  max-width: 65ch;
+}
+
+.about p + p {
+  margin-top: var(--space-4);
+}
+
+.aboutMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.aboutImage {
+  object-fit: cover;
+}
+
+.history {
+  columns: 2;
+  column-gap: var(--space-12);
+}
+
+.history p {
+  font-size: var(--text-base);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  break-inside: avoid;
+  margin-bottom: var(--space-4);
+}
+
+.values {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.valueCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+}
+
+.valueCard svg {
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+}
+
+.valueCard h3 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.valueCard p {
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .about {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .history {
+    columns: 1;
+  }
+}

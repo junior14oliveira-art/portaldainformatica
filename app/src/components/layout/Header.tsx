@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
 import styles from "./Header.module.css";
@@ -8,6 +9,11 @@ const NAV_LINKS = [
   { label: "Acessórios", href: "/categoria/acessorios" },
   { label: "Hardware", href: "/categoria/hardware" },
   { label: "Servidores", href: "/categoria/servidores" },
+];
+
+const SECONDARY_LINKS = [
+  { label: "Sobre", href: "/sobre" },
+  { label: "FAQ", href: "/faq" },
 ];
 
 const TOPBAR_ITEMS = [
@@ -30,54 +36,70 @@ export function Header() {
         </div>
       </div>
 
-      <div className={`container ${styles.main}`}>
-        <Link href="/" className={styles.logo}>
-          Portal <strong>One</strong>
-          <span className={styles.logoSub}>Informática</span>
-        </Link>
-
-        <form className={styles.search} role="search">
-          <input
-            type="search"
-            name="q"
-            placeholder="O que você está procurando?"
-            aria-label="Buscar produtos"
-          />
-          <button type="submit" aria-label="Buscar">
-            <Search size={18} strokeWidth={2.25} />
-          </button>
-        </form>
-
-        <div className={styles.actions}>
-          <Link href="/minha-conta" className={styles.actionItem}>
-            <User size={20} strokeWidth={2} aria-hidden />
-            <span className={styles.actionText}>
-              <span className={styles.actionLabel}>Minha conta</span>
-              <span className={styles.actionSub}>Entrar / Cadastro</span>
-            </span>
+      <div className={styles.main}>
+        <div className={`container ${styles.mainInner}`}>
+          <Link href="/" className={styles.logo} title="Home - Portal One Informática">
+            <Image
+              src="/institucional/logo.png"
+              alt="Portal One Informática"
+              width={177}
+              height={67}
+              priority
+            />
           </Link>
-          <Link href="/carrinho" className={styles.actionItem}>
-            <ShoppingCart size={20} strokeWidth={2} aria-hidden />
-            <span className={styles.actionText}>
-              <span className={styles.actionLabel}>Carrinho</span>
-              <span className={styles.actionSub}>0 itens</span>
-            </span>
-          </Link>
+
+          <form className={styles.search} role="search">
+            <input
+              type="search"
+              name="q"
+              placeholder="O que você está procurando?"
+              aria-label="Buscar produtos"
+            />
+            <button type="submit" aria-label="Buscar">
+              <Search size={18} strokeWidth={2.25} />
+            </button>
+          </form>
+
+          <div className={styles.actions}>
+            <Link href="/minha-conta" className={styles.actionItem}>
+              <User size={20} strokeWidth={2} aria-hidden />
+              <span className={styles.actionText}>
+                <span className={styles.actionLabel}>Minha conta</span>
+                <span className={styles.actionSub}>Entrar / Cadastro</span>
+              </span>
+            </Link>
+            <Link href="/carrinho" className={styles.actionItem}>
+              <ShoppingCart size={20} strokeWidth={2} aria-hidden />
+              <span className={styles.actionText}>
+                <span className={styles.actionLabel}>Carrinho</span>
+                <span className={styles.actionSub}>0 itens</span>
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
 
-      <nav className={`container ${styles.nav}`}>
-        <button className={styles.categoriesButton} type="button">
-          <Menu size={16} strokeWidth={2.25} aria-hidden />
-          Categorias
-        </button>
-        <ul className={styles.navList}>
-          {NAV_LINKS.map((link) => (
-            <li key={link.href}>
-              <Link href={link.href}>{link.label}</Link>
-            </li>
-          ))}
-        </ul>
+      <nav className={styles.nav}>
+        <div className={`container ${styles.navInner}`}>
+          <button className={styles.categoriesButton} type="button">
+            <Menu size={16} strokeWidth={2.25} aria-hidden />
+            Categorias
+          </button>
+          <ul className={styles.navList}>
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href}>{link.label}</Link>
+              </li>
+            ))}
+          </ul>
+          <ul className={styles.navSecondary}>
+            {SECONDARY_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href}>{link.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </nav>
     </header>
   );

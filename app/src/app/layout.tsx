@@ -10,9 +10,15 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Portal One Informática",
+  title: {
+    default: "Portal One Informática — Venda e Locação de Equipamentos",
+    template: "%s | Portal One Informática",
+  },
   description:
-    "Locação e venda de equipamentos de informática corporativos — notebooks e computadores seminovos com garantia.",
+    "Compra, venda e locação de computadores, notebooks e servidores corporativos seminovos Dell, HP e Lenovo — revisados, com garantia e nota fiscal. Guarulhos/SP, entrega para todo o Brasil.",
+  icons: {
+    icon: "/institucional/favicon.png",
+  },
 };
 
 export default function RootLayout({
