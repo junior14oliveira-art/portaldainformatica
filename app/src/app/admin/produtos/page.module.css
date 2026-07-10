@@ -165,6 +165,15 @@
   white-space: nowrap;
 }
 
+.questionCell {
+  max-width: 360px;
+  white-space: normal;
+}
+
+.questionCell p {
+  margin-bottom: var(--space-1);
+}
+
 .empty {
   padding: var(--space-8);
   text-align: center;

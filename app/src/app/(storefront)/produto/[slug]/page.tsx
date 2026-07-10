@@ -17,8 +17,10 @@ import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { COMPANY, SITE_URL } from "@/constants/company";
 import { getProductReviews } from "@/services/review-service";
+import { getProductQuestions } from "@/services/question-service";
 import { StarRating } from "@/components/review/StarRating";
 import { ReviewForm } from "@/components/review/ReviewForm";
+import { QuestionForm } from "@/components/review/QuestionForm";
 import styles from "./page.module.css";
 
 type PageProps = {
@@ -88,6 +90,7 @@ export default async function ProductPage({ params }: PageProps) {
   const pricePix = product.pricePix ? Number(product.pricePix) : null;
   const mainImage = product.images[0];
   const { reviews, average, count } = await getProductReviews(product.id);
+  const questions = await getProductQuestions(product.id);
 
   const whatsappProduct = `https://wa.me/${COMPANY.whatsappNumber}?text=${encodeURIComponent(
     `Olá! Tenho interesse no produto: ${product.name} (${product.sku})`
@@ -285,6 +288,34 @@ export default async function ProductPage({ params }: PageProps) {
         )}
 
         <ReviewForm productId={product.id} slug={product.slug} />
+      </section>
+
+      <section className={styles.reviews}>
+        <h2>Perguntas e respostas {questions.length > 0 ? `(${questions.length})` : ""}</h2>
+
+        {questions.length > 0 ? (
+          <div className={styles.reviewList}>
+            {questions.map((q) => (
+              <div key={q.id} className={styles.reviewItem}>
+                <div className={styles.reviewHeader}>
+                  <span className={styles.reviewAuthor}>{q.user.name} perguntou:</span>
+                </div>
+                <p className={styles.reviewComment}>{q.question}</p>
+                {q.answer ? (
+                  <p className={styles.reviewComment}>
+                    <strong>Resposta da Portal One:</strong> {q.answer}
+                  </p>
+                ) : (
+                  <p className={styles.reviewsEmpty}>Ainda não respondida.</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className={styles.reviewsEmpty}>Ainda não há perguntas para este produto.</p>
+        )}
+
+        <QuestionForm productId={product.id} slug={product.slug} />
       </section>
 
       {related.length > 0 ? (
