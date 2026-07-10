@@ -16,6 +16,9 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { COMPANY, SITE_URL } from "@/constants/company";
+import { getProductReviews } from "@/services/review-service";
+import { StarRating } from "@/components/review/StarRating";
+import { ReviewForm } from "@/components/review/ReviewForm";
 import styles from "./page.module.css";
 
 type PageProps = {
@@ -84,6 +87,7 @@ export default async function ProductPage({ params }: PageProps) {
   const price = Number(product.price);
   const pricePix = product.pricePix ? Number(product.pricePix) : null;
   const mainImage = product.images[0];
+  const { reviews, average, count } = await getProductReviews(product.id);
 
   const whatsappProduct = `https://wa.me/${COMPANY.whatsappNumber}?text=${encodeURIComponent(
     `Olá! Tenho interesse no produto: ${product.name} (${product.sku})`
@@ -105,6 +109,14 @@ export default async function ProductPage({ params }: PageProps) {
       availability: "https://schema.org/InStock",
       itemCondition: "https://schema.org/UsedCondition",
     },
+    aggregateRating:
+      count > 0
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: average.toFixed(1),
+            reviewCount: count,
+          }
+        : undefined,
   };
 
   const breadcrumbJsonLd = {
@@ -171,6 +183,14 @@ export default async function ProductPage({ params }: PageProps) {
             <span className={styles.brand}>{product.brand.name}</span>
           ) : null}
           <h1 className={styles.name}>{product.name}</h1>
+          {count > 0 ? (
+            <div className={styles.ratingSummary}>
+              <StarRating value={average} size={15} />
+              <span>
+                {average.toFixed(1)} ({count} {count === 1 ? "avaliação" : "avaliações"})
+              </span>
+            </div>
+          ) : null}
           <p className={styles.sku}>SKU: {product.sku}</p>
 
           {product.shortDescription ? (
@@ -237,6 +257,35 @@ export default async function ProductPage({ params }: PageProps) {
           <p>{product.description}</p>
         </section>
       ) : null}
+
+      <section className={styles.reviews}>
+        <h2>Avaliações {count > 0 ? `(${count})` : ""}</h2>
+
+        {reviews.length > 0 ? (
+          <div className={styles.reviewList}>
+            {reviews.map((review) => (
+              <div key={review.id} className={styles.reviewItem}>
+                <div className={styles.reviewHeader}>
+                  <StarRating value={review.rating} size={14} />
+                  <span className={styles.reviewAuthor}>{review.user.name}</span>
+                  {review.verifiedPurchase ? (
+                    <span className={styles.reviewVerified}>Compra verificada</span>
+                  ) : null}
+                </div>
+                {review.comment ? (
+                  <p className={styles.reviewComment}>{review.comment}</p>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className={styles.reviewsEmpty}>
+            Ainda não há avaliações para este produto. Seja o primeiro a avaliar!
+          </p>
+        )}
+
+        <ReviewForm productId={product.id} slug={product.slug} />
+      </section>
 
       {related.length > 0 ? (
         <section className={styles.related}>
