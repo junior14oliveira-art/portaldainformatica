@@ -14,6 +14,7 @@ export const auth = betterAuth({
     additionalFields: {
       firstName: { type: "string", required: true, input: true },
       lastName: { type: "string", required: true, input: true },
+      role: { type: "string", required: false, input: false },
     },
   },
   session: {

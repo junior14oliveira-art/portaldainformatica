@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { Loader2, MapPin, Plus, Truck, Wallet } from "lucide-react";
 import { PaymentMethod } from "@prisma/client";
 import { calculateShippingOptions, type ShippingOption } from "@/services/shipping-service";
-import { addAddressAction, placeOrderAction } from "@/app/checkout/actions";
+import { addAddressAction, placeOrderAction } from "@/app/(storefront)/checkout/actions";
 import { addressSchema } from "@/schemas/checkout-schema";
 import type { CartSummary } from "@/services/cart-service";
 import styles from "./CheckoutFlow.module.css";

@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { Loader2, Zap } from "lucide-react";
-import { simulatePaymentAction } from "@/app/checkout/actions";
+import { simulatePaymentAction } from "@/app/(storefront)/checkout/actions";
 import styles from "./SimulatePaymentButton.module.css";
 
 export function SimulatePaymentButton({ orderId }: { orderId: string }) {

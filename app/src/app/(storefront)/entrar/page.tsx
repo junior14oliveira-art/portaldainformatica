@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import styles from "../auth.module.css";
 
@@ -8,7 +7,13 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackURL?: string }>;
+}) {
+  const { callbackURL } = await searchParams;
+
   return (
     <div className={`container ${styles.page}`}>
       <div className={styles.card}>
@@ -16,9 +21,7 @@ export default function LoginPage() {
         <p className={styles.subtitle}>
           Entre para acompanhar pedidos, favoritos e propostas de locação.
         </p>
-        <Suspense fallback={null}>
-          <LoginForm />
-        </Suspense>
+        <LoginForm callbackURL={callbackURL} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Star } from "lucide-react";
-import { submitReviewAction } from "@/app/produto/[slug]/actions";
+import { submitReviewAction } from "@/app/(storefront)/produto/[slug]/actions";
 import styles from "./ReviewForm.module.css";
 
 type ReviewFormProps = {

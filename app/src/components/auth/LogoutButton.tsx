@@ -5,7 +5,12 @@ import { LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import styles from "./AuthForm.module.css";
 
-export function LogoutButton() {
+type LogoutButtonProps = {
+  className?: string;
+  compact?: boolean;
+};
+
+export function LogoutButton({ className, compact }: LogoutButtonProps) {
   const router = useRouter();
 
   async function handleLogout() {
@@ -15,9 +20,14 @@ export function LogoutButton() {
   }
 
   return (
-    <button type="button" className={styles.submit} onClick={handleLogout}>
+    <button
+      type="button"
+      className={className ?? styles.submit}
+      onClick={handleLogout}
+      aria-label="Sair da conta"
+    >
       <LogOut size={16} strokeWidth={2.25} aria-hidden />
-      Sair da conta
+      {compact ? null : "Sair da conta"}
     </button>
   );
 }
