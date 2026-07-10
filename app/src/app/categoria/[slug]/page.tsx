@@ -5,6 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCategoryIcon } from "@/lib/category-icons";
 import { ProductCard } from "@/components/product/ProductCard";
+import { SITE_URL } from "@/constants/company";
 import styles from "./page.module.css";
 
 type PageProps = {
@@ -16,11 +17,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const category = await prisma.category.findUnique({ where: { slug } });
   if (!category) return {};
+  const description =
+    category.description ??
+    `${category.name} corporativos seminovos com garantia e nota fiscal na Portal One Informática.`;
   return {
     title: category.name,
-    description:
-      category.description ??
-      `${category.name} corporativos seminovos com garantia e nota fiscal na Portal One Informática.`,
+    description,
+    alternates: { canonical: `/categoria/${category.slug}` },
+    openGraph: {
+      type: "website",
+      title: category.name,
+      description,
+      url: `${SITE_URL}/categoria/${category.slug}`,
+    },
   };
 }
 
@@ -67,8 +76,26 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
   const Icon = getCategoryIcon(category.slug);
   const baseUrl = `/categoria/${category.slug}`;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: category.name,
+        item: `${SITE_URL}${baseUrl}`,
+      },
+    ],
+  };
+
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <section className={styles.banner}>
         <div className={`container ${styles.bannerInner}`}>
           <nav className={styles.breadcrumb} aria-label="Navegação estrutural">

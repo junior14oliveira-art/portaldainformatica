@@ -20,8 +20,6 @@ const currency = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
-const INSTALLMENTS = 10;
-
 export function ProductCard({
   id,
   slug,
@@ -32,7 +30,6 @@ export function ProductCard({
   imageUrl,
   imageAlt,
 }: ProductCardProps) {
-  const installment = price / INSTALLMENTS;
   const pixDiscount =
     pricePix && pricePix < price
       ? Math.round(((price - pricePix) / price) * 100)
@@ -55,7 +52,6 @@ export function ProductCard({
               <Laptop size={40} strokeWidth={1.5} aria-hidden />
             </span>
           )}
-          <span className={styles.condition}>Seminovo</span>
           {pixDiscount ? (
             <span className={styles.discount}>-{pixDiscount}% no PIX</span>
           ) : null}
@@ -78,10 +74,6 @@ export function ProductCard({
             <span className={styles.pix}>{currency.format(price)}</span>
           )}
         </div>
-        <p className={styles.installments}>
-          ou {currency.format(price)} em até {INSTALLMENTS}x de{" "}
-          {currency.format(installment)}
-        </p>
 
         <AddToCartButton productId={id} className={styles.buyButton} />
       </div>

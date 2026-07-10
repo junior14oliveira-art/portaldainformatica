@@ -7,7 +7,6 @@ import {
   ChevronRight,
   FileText,
   Laptop,
-  MessageCircle,
   ShieldCheck,
   Truck,
   Zap,
@@ -15,7 +14,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { ProductCard } from "@/components/product/ProductCard";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
-import { COMPANY } from "@/constants/company";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
+import { COMPANY, SITE_URL } from "@/constants/company";
 import styles from "./page.module.css";
 
 type PageProps = {
@@ -27,15 +27,30 @@ const currency = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
-const INSTALLMENTS = 10;
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await prisma.product.findUnique({ where: { slug } });
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: { images: { where: { isMain: true }, take: 1 } },
+  });
   if (!product) return {};
+
+  const title = product.metaTitle ?? product.name;
+  const description =
+    product.metaDescription ?? product.shortDescription ?? undefined;
+  const image = product.images[0]?.url;
+
   return {
-    title: product.metaTitle ?? product.name,
-    description: product.metaDescription ?? product.shortDescription ?? undefined,
+    title,
+    description,
+    alternates: { canonical: `/produto/${product.slug}` },
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: `${SITE_URL}/produto/${product.slug}`,
+      images: image ? [{ url: image }] : undefined,
+    },
   };
 }
 
@@ -68,15 +83,60 @@ export default async function ProductPage({ params }: PageProps) {
 
   const price = Number(product.price);
   const pricePix = product.pricePix ? Number(product.pricePix) : null;
-  const installment = price / INSTALLMENTS;
   const mainImage = product.images[0];
 
   const whatsappProduct = `https://wa.me/${COMPANY.whatsappNumber}?text=${encodeURIComponent(
     `Olá! Tenho interesse no produto: ${product.name} (${product.sku})`
   )}`;
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    sku: product.sku,
+    description: product.shortDescription ?? product.description ?? undefined,
+    image: mainImage ? [mainImage.url] : undefined,
+    brand: product.brand ? { "@type": "Brand", name: product.brand.name } : undefined,
+    offers: {
+      "@type": "Offer",
+      url: `${SITE_URL}/produto/${product.slug}`,
+      priceCurrency: "BRL",
+      price: (pricePix ?? price).toFixed(2),
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/UsedCondition",
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: product.category.name,
+        item: `${SITE_URL}/categoria/${product.category.slug}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+        item: `${SITE_URL}/produto/${product.slug}`,
+      },
+    ],
+  };
+
   return (
     <div className={`container ${styles.page}`}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <nav className={styles.breadcrumb} aria-label="Navegação estrutural">
         <Link href="/">Início</Link>
         <ChevronRight size={14} strokeWidth={2} aria-hidden />
@@ -125,10 +185,6 @@ export default async function ProductPage({ params }: PageProps) {
                   <span className={styles.pixPrice}>{currency.format(pricePix)}</span>
                   <span className={styles.pixLabel}>no PIX</span>
                 </div>
-                <p className={styles.installments}>
-                  ou {currency.format(price)} em até {INSTALLMENTS}x de{" "}
-                  {currency.format(installment)} sem juros
-                </p>
               </>
             ) : (
               <div className={styles.pixRow}>
@@ -149,7 +205,7 @@ export default async function ProductPage({ params }: PageProps) {
               rel="noopener noreferrer"
               className={styles.whatsappButton}
             >
-              <MessageCircle size={18} strokeWidth={2} aria-hidden />
+              <WhatsAppIcon size={18} />
               Comprar pelo WhatsApp
             </a>
           </div>

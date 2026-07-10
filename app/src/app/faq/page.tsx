@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { MessageCircle } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { WHATSAPP_URL } from "@/constants/company";
 import styles from "./page.module.css";
 
@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Perguntas Frequentes",
   description:
     "Tire suas dúvidas sobre locação e compra de computadores, notebooks e servidores com a Portal One Informática.",
+  alternates: { canonical: "/faq" },
 };
 
 const FAQS = [
@@ -38,9 +39,26 @@ const FAQS = [
   },
 ];
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+
 export default function FaqPage() {
   return (
     <div className={`container ${styles.page}`}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <header className={styles.header}>
         <h1>Perguntas frequentes</h1>
         <p>
@@ -61,7 +79,7 @@ export default function FaqPage() {
       <aside className={styles.cta}>
         <p>Não encontrou sua resposta?</p>
         <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-          <MessageCircle size={18} strokeWidth={2} aria-hidden />
+          <WhatsAppIcon size={18} />
           Falar com a nossa equipe
         </a>
       </aside>

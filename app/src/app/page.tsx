@@ -6,7 +6,6 @@ import {
   CalendarClock,
   FileText,
   Headset,
-  MessageCircle,
   RefreshCw,
   ShieldCheck,
   Truck,
@@ -15,6 +14,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { getCategoryIcon } from "@/lib/category-icons";
 import { ProductCard } from "@/components/product/ProductCard";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { WHATSAPP_URL, WHATSAPP_RENTAL_URL } from "@/constants/company";
 import styles from "./page.module.css";
 
@@ -102,7 +102,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className={styles.heroCtaSecondary}
               >
-                <MessageCircle size={18} strokeWidth={2} aria-hidden />
+                <WhatsAppIcon size={18} />
                 Falar com especialista
               </a>
             </div>
@@ -247,7 +247,7 @@ export default async function Home() {
         className={styles.whatsappFloat}
         aria-label="Conversar no WhatsApp"
       >
-        <MessageCircle size={26} strokeWidth={2} aria-hidden />
+        <WhatsAppIcon size={30} />
       </a>
     </div>
   );

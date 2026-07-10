@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Sobre",
   description:
     "Conheça a Portal One Informática: empresa fundada em 2021, especializada em locação e venda de equipamentos de informática para cenários corporativos.",
+  alternates: { canonical: "/sobre" },
 };
 
 const VALUES = [
