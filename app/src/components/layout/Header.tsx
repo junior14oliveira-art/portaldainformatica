@@ -63,7 +63,7 @@ export async function Header() {
             />
           </Link>
 
-          <form className={styles.search} role="search">
+          <form className={styles.search} role="search" action="/busca">
             <input
               type="search"
               name="q"
