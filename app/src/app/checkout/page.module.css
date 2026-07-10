@@ -1,0 +1,10 @@
+.page {
+  padding-block: var(--space-8) var(--space-16);
+}
+
+.title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin-bottom: var(--space-8);
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,8 @@ import styles from "./AuthForm.module.css";
 
 export function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackURL = searchParams.get("callbackURL") || "/minha-conta";
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -31,7 +33,7 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/minha-conta");
+    router.push(callbackURL);
     router.refresh();
   }
 

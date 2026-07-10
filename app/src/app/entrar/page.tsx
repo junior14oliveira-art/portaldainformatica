@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/LoginForm";
 import styles from "../auth.module.css";
 
@@ -15,7 +16,9 @@ export default function LoginPage() {
         <p className={styles.subtitle}>
           Entre para acompanhar pedidos, favoritos e propostas de locação.
         </p>
-        <LoginForm />
+        <Suspense fallback={null}>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );
