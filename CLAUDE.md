@@ -25,11 +25,14 @@ O usuário quer que integrações como **Mercado Pago, Correios, Melhor Envio et
 - `shipping-service.ts` e o pagamento do checkout já isolam a lógica em arquivos próprios (`shipping-service.ts`, seção de pagamento em `order-service.ts`) — é o ponto de partida natural para virar interface plugável.
 - Não superengenheirar antes de ter pelo menos 2 integrações reais implementadas (Mercado Pago real + 1 outra) — aí sim extrair o padrão comum.
 
-## ⚠️ Editor visual para o admin (estilo Wix) — pedido do usuário, ainda NÃO iniciado
-O usuário quer que o administrador consiga **editar o visual do site** parecido com o editor da Wix (drag-and-drop, edição ao vivo). Isso é um projeto grande e separado de "CRUD de produtos" — não confundir escopo.
-- **Ainda não existe nada disso implementado.** O que existe hoje é só CRUD tradicional (formulários) para produtos/pedidos/avaliações.
-- Antes de começar, vale decidir com o usuário o tamanho real da ambição: (a) um "editor de conteúdo" simples (banners da Home, textos, cores — via um `SiteSettings`/`Banner` model, já existe `Banner` no schema) é uma primeira etapa realista; (b) um construtor de página completo tipo Wix (blocos arrastáveis, canvas visual) é um projeto de várias semanas à parte, normalmente construído com algo como Puck, Craft.js ou um builder próprio.
-- **Decisão do usuário (2026-07-10): construir o construtor completo estilo Wix (opção b), não a versão simples.** Isso é um projeto grande — quando for iniciar, planejar como fase própria (avaliar Puck ou Craft.js como base em vez de construir do zero), não misturar com tarefas de CRUD comum. Ainda não iniciado.
+## Editor visual para o admin (estilo Wix) — INICIADO (base funcional pronta)
+O usuário quer que o administrador **edite o visual do site** com drag-and-drop estilo Wix. Decisão dele (2026-07-10): construtor completo, não versão simples. **Base já construída** usando **Puck** (`@measured/puck`, compatível com React 19):
+- **Model `Page`** guarda o layout de blocos em JSON (`data`). Migration `add_page_builder`.
+- **`src/lib/puck/config.tsx`**: define os blocos disponíveis (Hero, Título, Parágrafo, Imagem, Botão, Espaçamento, Cards de destaque), todos em português e estilizados com os design tokens da loja. **Para adicionar um bloco novo, é aqui.**
+- **Admin**: `/admin/paginas` (lista/cria/exclui), `/admin/paginas/[id]` (editor Puck em tela cheia). O botão "Publish" do Puck chama `savePageAction`.
+- **Público**: `/p/[slug]` renderiza via `PuckRenderer` (client component — o `Render` do Puck usa contexto). Com metadata/canonical/OG + entra no sitemap quando publicada.
+- **Notas técnicas**: (1) o pacote `@measured/puck` está deprecado em favor de `@puckeditor/core` — funciona igual, migrar quando conveniente. (2) O screenshot do preview dá timeout na página do editor e na `/p/[slug]` (Puck carrega assets pesados) — validar por `get_page_text`/`read_page`, não screenshot. (3) Upload de imagem no editor ainda é por URL (campo de texto); integrar Cloudflare R2 depois.
+- **Próximos incrementos**: mais blocos (grade de produtos dinâmica puxando do banco, vídeo, FAQ), upload de imagem direto, e opção de montar a própria Home pelo editor.
 
 ## ⚠️ SEO é prioridade máxima (instrução permanente do usuário)
 O usuário deixou explícito que **SEO/performance no Google é a parte mais importante do projeto**, acima até do design. Isso vale para **toda construção futura**, não só o que já foi feito:
@@ -127,7 +130,7 @@ Ver `docs/13-roadmap.md` para detalhes de cada fase.
 - **claude-mem** — memória entre sessões.
 
 ## Próximos passos sugeridos
-1. Construtor visual estilo Wix (decisão do usuário: versão completa — ver seção acima). Maior item pendente do roadmap.
+1. Incrementar o construtor visual (ver seção acima): bloco de grade de produtos dinâmica, upload de imagem via R2, mais blocos.
 2. Admin de Cupons/Cashback/Banners (schema já existe, falta CRUD — Blog e Usuários já foram feitos).
 3. Arquitetura de integrações plugáveis (Mercado Pago/Correios/Melhor Envio como "plugins" — ver seção acima) quando houver credenciais reais de sandbox.
 4. Lighthouse audit formal (Performance/SEO/A11y/Best Practices) quando o site tiver mais conteúdo real.
