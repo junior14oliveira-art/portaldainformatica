@@ -590,6 +590,23 @@ model BlogPost {
   @@map("blog_posts")
 }
 
+// Paginas montadas no editor visual (estilo Wix), via Puck. O layout de
+// blocos arrastaveis fica serializado em JSON no campo `data`.
+model Page {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  data            Json
+  published       Boolean   @default(false)
+  metaTitle       String?   @map("meta_title")
+  metaDescription String?   @map("meta_description")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("pages")
+}
+
 // ---------------------------------------------------------------------------
 // AUDITORIA
 // ---------------------------------------------------------------------------

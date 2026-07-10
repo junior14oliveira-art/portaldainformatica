@@ -18,6 +18,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   ]);
 
+  const builderPages = await prisma.page.findMany({
+    where: { published: true },
+    select: { slug: true, updatedAt: true },
+  });
+
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, changeFrequency: "daily", priority: 1 },
     { url: `${SITE_URL}/sobre`, changeFrequency: "monthly", priority: 0.5 },
@@ -46,5 +51,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...blogRoutes];
+  const builderRoutes: MetadataRoute.Sitemap = builderPages.map((page) => ({
+    url: `${SITE_URL}/p/${page.slug}`,
+    lastModified: page.updatedAt,
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...categoryRoutes,
+    ...productRoutes,
+    ...blogRoutes,
+    ...builderRoutes,
+  ];
 }

@@ -1,0 +1,34 @@
+.wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-background);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-dark);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.slug {
+  margin-left: var(--space-3);
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.status {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.wrapper :global(.Puck) {
+  flex: 1;
+  min-height: 0;
+}

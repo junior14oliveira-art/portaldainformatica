@@ -13,6 +13,7 @@ import {
   Users,
   Newspaper,
   HelpCircle,
+  LayoutTemplate,
   ExternalLink,
 } from "lucide-react";
 import styles from "./AdminSidebar.module.css";
@@ -21,6 +22,7 @@ const NAV_ITEMS = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/produtos", label: "Produtos", icon: Package },
   { href: "/admin/pedidos", label: "Pedidos", icon: ShoppingCart },
+  { href: "/admin/paginas", label: "Páginas", icon: LayoutTemplate },
   { href: "/admin/categorias", label: "Categorias", icon: FolderTree },
   { href: "/admin/marcas", label: "Marcas", icon: Tags },
   { href: "/admin/avaliacoes", label: "Avaliações", icon: Star },
