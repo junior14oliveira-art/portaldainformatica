@@ -44,6 +44,7 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
           {data.recentOrders.length > 0 ? (
+            <div className={styles.tableScroll}>
             <table className={styles.table}>
               <thead>
                 <tr>
@@ -72,6 +73,7 @@ export default async function AdminDashboardPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           ) : (
             <p className={styles.empty}>Nenhum pedido ainda.</p>
           )}

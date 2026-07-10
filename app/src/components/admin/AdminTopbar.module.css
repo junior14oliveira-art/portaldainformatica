@@ -62,3 +62,13 @@
   color: var(--color-danger);
   border-color: var(--color-danger);
 }
+
+@media (max-width: 900px) {
+  .topbar {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .userInfo {
+    display: none;
+  }
+}
