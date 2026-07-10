@@ -29,7 +29,7 @@ O usuário quer que integrações como **Mercado Pago, Correios, Melhor Envio et
 O usuário quer que o administrador consiga **editar o visual do site** parecido com o editor da Wix (drag-and-drop, edição ao vivo). Isso é um projeto grande e separado de "CRUD de produtos" — não confundir escopo.
 - **Ainda não existe nada disso implementado.** O que existe hoje é só CRUD tradicional (formulários) para produtos/pedidos/avaliações.
 - Antes de começar, vale decidir com o usuário o tamanho real da ambição: (a) um "editor de conteúdo" simples (banners da Home, textos, cores — via um `SiteSettings`/`Banner` model, já existe `Banner` no schema) é uma primeira etapa realista; (b) um construtor de página completo tipo Wix (blocos arrastáveis, canvas visual) é um projeto de várias semanas à parte, normalmente construído com algo como Puck, Craft.js ou um builder próprio.
-- Próximo passo sugerido: perguntar ao usuário se ele quer começar pela opção (a) — editar banners/textos da Home — antes de partir pra um builder completo.
+- **Decisão do usuário (2026-07-10): construir o construtor completo estilo Wix (opção b), não a versão simples.** Isso é um projeto grande — quando for iniciar, planejar como fase própria (avaliar Puck ou Craft.js como base em vez de construir do zero), não misturar com tarefas de CRUD comum. Ainda não iniciado.
 
 ## ⚠️ SEO é prioridade máxima (instrução permanente do usuário)
 O usuário deixou explícito que **SEO/performance no Google é a parte mais importante do projeto**, acima até do design. Isso vale para **toda construção futura**, não só o que já foi feito:

@@ -18,6 +18,7 @@ const NAV_LINKS = [
 ];
 
 const SECONDARY_LINKS = [
+  { label: "Blog", href: "/blog" },
   { label: "Sobre", href: "/sobre" },
   { label: "FAQ", href: "/faq" },
 ];
