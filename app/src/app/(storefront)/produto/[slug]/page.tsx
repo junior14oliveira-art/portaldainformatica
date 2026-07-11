@@ -12,8 +12,10 @@ import {
   Zap,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUserWishlist } from "@/lib/wishlist-context";
 import { ProductCard } from "@/components/product/ProductCard";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { WishlistButton } from "@/components/product/WishlistButton";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { COMPANY, SITE_URL } from "@/constants/company";
 import { getProductReviews } from "@/services/review-service";
@@ -91,6 +93,7 @@ export default async function ProductPage({ params }: PageProps) {
   const mainImage = product.images[0];
   const { reviews, average, count } = await getProductReviews(product.id);
   const questions = await getProductQuestions(product.id);
+  const wishlist = await getCurrentUserWishlist();
 
   const whatsappProduct = `https://wa.me/${COMPANY.whatsappNumber}?text=${encodeURIComponent(
     `Olá! Tenho interesse no produto: ${product.name} (${product.sku})`
@@ -231,6 +234,11 @@ export default async function ProductPage({ params }: PageProps) {
               <WhatsAppIcon size={18} />
               Comprar pelo WhatsApp
             </a>
+            <WishlistButton
+              productId={product.id}
+              initialInWishlist={wishlist.has(product.id)}
+              variant="inline"
+            />
           </div>
 
           <ul className={styles.assurances}>

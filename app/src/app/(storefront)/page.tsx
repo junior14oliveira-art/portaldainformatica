@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCategoryIcon } from "@/lib/category-icons";
+import { getCurrentUserWishlist } from "@/lib/wishlist-context";
 import { ProductCard } from "@/components/product/ProductCard";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { WHATSAPP_URL, WHATSAPP_RENTAL_URL } from "@/constants/company";
@@ -52,7 +53,7 @@ const RENTAL_BENEFITS = [
 const BRAND_NAMES = ["Dell", "HP", "Lenovo", "Cisco", "Samsung", "LG"];
 
 export default async function Home() {
-  const [categories, products] = await Promise.all([
+  const [categories, products, wishlist] = await Promise.all([
     prisma.category.findMany({
       where: { active: true },
       orderBy: { order: "asc" },
@@ -67,6 +68,7 @@ export default async function Home() {
       orderBy: [{ featured: "desc" }, { createdAt: "desc" }],
       take: 8,
     }),
+    getCurrentUserWishlist(),
   ]);
 
   return (
@@ -175,6 +177,7 @@ export default async function Home() {
                 pricePix={product.pricePix ? Number(product.pricePix) : null}
                 imageUrl={product.images[0]?.url ?? null}
                 imageAlt={product.images[0]?.altText ?? null}
+                inWishlist={wishlist.has(product.id)}
               />
             ))}
           </div>

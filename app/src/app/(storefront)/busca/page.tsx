@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SearchX } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUserWishlist } from "@/lib/wishlist-context";
 import { ProductCard } from "@/components/product/ProductCard";
 import styles from "./page.module.css";
 
@@ -38,6 +39,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
         orderBy: { createdAt: "desc" },
       })
     : [];
+
+  const wishlist = await getCurrentUserWishlist();
 
   return (
     <div className={`container ${styles.page}`}>
@@ -79,6 +82,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
               pricePix={product.pricePix ? Number(product.pricePix) : null}
               imageUrl={product.images[0]?.url ?? null}
               imageAlt={product.images[0]?.altText ?? null}
+              inWishlist={wishlist.has(product.id)}
             />
           ))}
         </div>

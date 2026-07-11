@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getCategoryIcon } from "@/lib/category-icons";
+import { getCurrentUserWishlist } from "@/lib/wishlist-context";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SITE_URL } from "@/constants/company";
 import styles from "./page.module.css";
@@ -72,6 +73,8 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
       orderBy: { name: "asc" },
     }),
   ]);
+
+  const wishlist = await getCurrentUserWishlist();
 
   const Icon = getCategoryIcon(category.slug);
   const baseUrl = `/categoria/${category.slug}`;
@@ -183,6 +186,7 @@ export default async function CategoryPage({ params, searchParams }: PageProps) 
                   pricePix={product.pricePix ? Number(product.pricePix) : null}
                   imageUrl={product.images[0]?.url ?? null}
                   imageAlt={product.images[0]?.altText ?? null}
+                  inWishlist={wishlist.has(product.id)}
                 />
               ))}
             </div>

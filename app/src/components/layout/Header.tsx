@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { headers } from "next/headers";
-import { Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
+import { Heart, Search, ShieldCheck, ShoppingCart, Truck, User, Zap } from "lucide-react";
 import { peekCartSessionId } from "@/lib/cart-session";
 import { getCartItemCount } from "@/services/cart-service";
+import { getWishlistCount } from "@/services/wishlist-service";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { CategoriesMenu } from "@/components/layout/CategoriesMenu";
@@ -33,6 +34,7 @@ export async function Header() {
   const sessionId = await peekCartSessionId();
   const cartCount = sessionId ? await getCartItemCount(sessionId) : 0;
   const session = await auth.api.getSession({ headers: await headers() });
+  const wishlistCount = session ? await getWishlistCount(session.user.id) : 0;
   const categories = await prisma.category.findMany({
     where: { active: true },
     orderBy: { order: "asc" },
@@ -88,6 +90,20 @@ export async function Header() {
                 </span>
                 <span className={styles.actionSub}>
                   {session ? "Ver perfil" : "Entrar / Cadastro"}
+                </span>
+              </span>
+            </Link>
+            <Link href="/favoritos" className={styles.actionItem}>
+              <span className={styles.cartIconWrapper}>
+                <Heart size={20} strokeWidth={2} aria-hidden />
+                {wishlistCount > 0 ? (
+                  <span className={styles.cartBadge}>{wishlistCount}</span>
+                ) : null}
+              </span>
+              <span className={styles.actionText}>
+                <span className={styles.actionLabel}>Favoritos</span>
+                <span className={styles.actionSub}>
+                  {wishlistCount} {wishlistCount === 1 ? "item" : "itens"}
                 </span>
               </span>
             </Link>
